@@ -1,0 +1,14 @@
+This product includes software developed by Anthropic.
+
+The skill at `skills/claude-automation-recommender/` is copied from the
+Anthropic Claude plugins (`claude-code-setup` plugin) and is licensed under
+the Apache License, Version 2.0:
+
+    https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-code-setup
+
+Modifications from upstream:
+  - Added an "Agent Compatibility" section to SKILL.md describing how the
+    recommendations apply to non-Claude agents (e.g., GitHub Copilot CLI).
+
+A copy of the Apache 2.0 License is available at:
+    http://www.apache.org/licenses/LICENSE-2.0
