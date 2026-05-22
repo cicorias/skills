@@ -5,5 +5,9 @@
   "author": {
     "name": "Shawn Cicoria",
     "email": "github@cicoria.com"
-  }
+  },
+  "skills" : [
+    "./skills/grill-me",
+    "./skills/claude-automation-recommender"
+  ]
 }
