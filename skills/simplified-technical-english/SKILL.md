@@ -11,6 +11,7 @@ description: >-
   "controlled language", "plain technical writing", "maintenance manual", or
   requests to make technical text easier for non-native readers or machine
   translation.
+allowed-tools: [Read, Write, Edit, Glob, Grep]
 ---
 
 # Simplified Technical English (STE) Writer & Editor
