@@ -3,6 +3,17 @@
 > **This is the single source of truth for agent instructions.**
 > `CLAUDE.md` and `.github/copilot-instructions.md` are **symlinks** to this file.
 > Edit `AGENTS.md` only — never edit the symlinks directly.
+>
+> ⚠️ **Keep all generative-AI tool guidance in sync.** Every guidance file for an
+> AI/agent tool in this repo — `AGENTS.md`, `CLAUDE.md`,
+> `.github/copilot-instructions.md`, and any others added later (e.g. `.cursorrules`,
+> `GEMINI.md`, `.windsurfrules`) — must carry the **same** guidance. They are wired as
+> symlinks so this happens for free. **If any of them is NOT a symlink to `AGENTS.md`**
+> (for example, a symlink-unaware checkout on Windows turned it into a plain copy, or a
+> tool requires a real file), then you MUST manually copy every change into each
+> non-symlinked file so they never drift apart. Before finishing any edit to these
+> files, verify they are still symlinks (`ls -la`, `git ls-files -s` → mode `120000`);
+> if not, re-create the symlink or propagate the change by hand.
 
 This repository is a **collection of reusable agent skills**. Each skill is a
 self-contained folder that any [`skills`](https://npm.im/skills)-compatible agent
