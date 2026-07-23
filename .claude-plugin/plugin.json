@@ -8,6 +8,8 @@
   },
   "skills" : [
     "./skills/grill-me",
-    "./skills/claude-automation-recommender"
+    "./skills/claude-automation-recommender",
+    "./skills/new-skill",
+    "./skills/simplified-technical-english"
   ]
 }
