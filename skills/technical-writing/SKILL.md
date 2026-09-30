@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Technical writing
 
+> **Claude Code:** pstack skills are user-invoked only (`disable-model-invocation`), so the Skill tool cannot load them. To follow a sibling pstack skill named here, Read `${CLAUDE_SKILL_DIR}/../<name>/SKILL.md` (a `principle-*` name included) and resolve its relative paths against that folder.
+
 The goal is writing a tired engineer understands on the first read. Four layers get you there, one question each: what kind of document is this, how do sentences address the reader, how much does each sentence carry, and can any sentence be read two ways. Apply all four.
 
 Three rules sit above the layers:

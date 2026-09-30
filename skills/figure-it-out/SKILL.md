@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Figure it out
 
+> **Claude Code:** pstack skills are user-invoked only (`disable-model-invocation`), so the Skill tool cannot load them. To follow a sibling pstack skill named here, Read `${CLAUDE_SKILL_DIR}/../<name>/SKILL.md` (a `principle-*` name included) and resolve its relative paths against that folder.
+
 When the task matches no playbook, design one. The deliverable before any code is the workflow itself: a sequence of phases that scales rigor to the task, runs the scientific method, and leaves a decision trail a human can audit after stepping away.
 
 ## Start

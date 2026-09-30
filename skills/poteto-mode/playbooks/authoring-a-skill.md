@@ -2,7 +2,7 @@
 
 **You own the skill's voice.**
 
-1. Use the **create-skill** skill (Cursor's built-in for authoring SKILL.md files).
+1. Use Anthropic's **skill-creator** skill for authoring SKILL.md files (`/plugin install skill-creator@claude-plugins-official`). In a skills repo that ships its own builder (for example `/new-skill`), use that for scaffolding and wiring, and `skill-creator` for the test / iterate loop.
 2. Validate the skill: frontmatter has `name` and `description`, referenced files exist, cross-skill links resolve.
 3. Test cases if structural. Skip if subjective.
 4. Run **Opening a PR**.

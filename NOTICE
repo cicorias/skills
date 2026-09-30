@@ -12,3 +12,38 @@ Modifications from upstream:
 
 A copy of the Apache 2.0 License is available at:
     http://www.apache.org/licenses/LICENSE-2.0
+
+----
+
+The skills listed below and the subagents in `agents/` are adapted from
+pstack by Lauren Tan, part of the Cursor plugins repository, and are licensed
+under the MIT License:
+
+    https://github.com/cursor/plugins/tree/main/pstack
+    (imported from commit 5f9a00e39a4c6e67703e83fbc99c0e3fd51c5aed)
+
+    Copyright (c) 2026 Lauren Tan
+
+Skills: architect, arena, automate-me, blast-radius, bro,
+create-verification-skill, figure-it-out, how, interrogate,
+maintain-verification-skill, make-bot-ui, no-comments, poteto-mode,
+principle-* (23 skills), recall, reflect, setup-pstack, show-me-your-work,
+swarm, tdd, teach, technical-writing, typescript-best-practices, unslop, why.
+Agents: poteto-agent, comment-sicko.
+
+Modifications from upstream:
+  - Replaced Cursor-specific tools, paths, and features with their Claude Code
+    equivalents: Agent tool and subagent types, Claude model aliases in place
+    of multi-vendor model slugs, ~/.claude/rules/pstack-models.md,
+    ~/.claude/projects transcripts, .claude/skills paths, AskUserQuestion,
+    skill-creator, /simplify, /run, /loop, remote/worktree isolation, and
+    routine API triggers (make-bot-ui).
+  - Added a "Claude Code runtime" section to poteto-mode and sibling-skill
+    loading notes, renamed the "Comment Sicko" agent to `comment-sicko`, and
+    normalized skill names to kebab-case.
+  - worktree-audit.sh reads Claude Code transcripts and runs on Linux and macOS.
+  - watch-pr also treats review threads from the `claude` GitHub App as
+    review-bot threads.
+  - Not included: automations/benny and docs/guide.
+
+The full MIT License text is in `licenses/pstack-MIT.txt`.

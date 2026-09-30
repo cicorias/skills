@@ -40,6 +40,31 @@ The catalog below is the living list of skills in this repo — add a row for ea
 | [grill-me](#grill-me) | `/grill-me` | Interview you about a task until it's fully scoped, then write `DESIGN.md`. |
 | [claude-automation-recommender](#claude-automation-recommender) | `/claude-automation-recommender` | Analyze a codebase and recommend agent automations (read-only). |
 | [simplified-technical-english](#simplified-technical-english) | `/simplified-technical-english` | Write, rewrite, or audit technical docs in Simplified Technical English (ASD-STE100). |
+| [poteto-mode](#pstack) | `/poteto-mode` | pstack's hub: poteto's working style, playbooks (feature, bug fix, babysit, shipping, orchestrate, …), and the principles index. |
+| [setup-pstack](#pstack) | `/setup-pstack` | Pick the Claude model (`opus` / `sonnet` / `haiku` / `inherit`) per pstack role; writes `~/.claude/rules/pstack-models.md`. |
+| [how](#pstack) | `/how` | Explain how a subsystem works, with parallel explorer subagents for big questions. |
+| [why](#pstack) | `/why` | Find why code is shaped the way it is from git, PRs, and every MCP evidence source. |
+| [architect](#pstack) | `/architect` | Sketch types and module boundaries through a multi-model arena before implementing. |
+| [arena](#pstack) | `/arena` | Run N candidates at one task, pick a base, graft the best parts of the rest. |
+| [swarm](#pstack) | `/swarm` | Fan out N parallel workers (remote or worktree-isolated) and return one report. |
+| [interrogate](#pstack) | `/interrogate` | Multi-model adversarial code review with a lead-judgment verdict. |
+| [blast-radius](#pstack) | `/blast-radius` | Find what a change could break beyond the diff, and prove the safety fact by running code. |
+| [figure-it-out](#pstack) | `/figure-it-out` | Design a bespoke, auditable playbook for large or unattended work. |
+| [reflect](#pstack) | `/reflect` | Mine the session transcript for durable learnings and route them to skill edits. |
+| [recall](#pstack) | `/recall` | Rebuild your recent working context from Claude Code transcripts and live state. |
+| [automate-me](#pstack) | `/automate-me` | Turn your working conventions into a personal `<handle>-mode` skill. |
+| [show-me-your-work](#pstack) | `/show-me-your-work` | Keep a TSV decision trail for long-running or unattended work. |
+| [no-comments](#pstack) | `/no-comments` | Run the `comment-sicko` subagent over a diff, then fix what it flags. |
+| [unslop](#pstack) | `/unslop` | Cut AI tells from any writing. |
+| [technical-writing](#pstack) | `/technical-writing` | Layered standard for docs, RFCs, PR descriptions, and commit messages. |
+| [teach](#pstack) | `/teach` | Explain a body of work plainly by weaving `how` and `why` together. |
+| [bro](#pstack) | `/bro` | Restate the last message in plain language. |
+| [tdd](#pstack) | `/tdd` | Red-green TDD when explicitly asked or when a cheap local test target exists. |
+| [typescript-best-practices](#pstack) | `/typescript-best-practices` | TypeScript conventions for `.ts` / `.tsx` work. |
+| [create-verification-skill](#pstack) | `/create-verification-skill` | Generate a project-local `verify-<app>` skill that drives the real app. |
+| [maintain-verification-skill](#pstack) | `/maintain-verification-skill` | Keep a project's verification skill and feature map honest. |
+| [make-bot-ui](#pstack) | `/make-bot-ui` | Build a local UI that fires a Claude Code routine's API trigger, optionally on Tailscale. |
+| [principle-*](#pstack) (23 skills) | `/principle-<name>` | Leaf principles poteto-mode cites: laziness protocol, prove it works, fix root causes, model the domain, … |
 
 ### `/new-skill`
 
@@ -98,6 +123,34 @@ Writes and edits technical documentation in **Simplified Technical English (STE)
 ```
 
 > Teaches STE principles and method — it is not the ASD-STE100 dictionary. For certified compliance, defer to the current specification and a checker tool.
+
+### pstack
+
+A Claude Code port of [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan ([poteto](https://x.com/poteto)), originally written for Cursor (MIT, see [`NOTICE`](./NOTICE)). It is a set of rigorous agent workflows for writing less code of higher quality: understand first (`/how`, `/why`), design before code (`/architect`, `/arena`), adversarial review (`/interrogate`), verified work, and parallel subagents you can trust. Start with `/poteto-mode`, and run `/setup-pstack` once to choose models.
+
+It also ships two subagents in [`agents/`](./agents/):
+
+- `poteto-agent` runs poteto-mode end to end. Spawn it with `subagent_type: "poteto-agent"`.
+- `comment-sicko` is a comment-deleting reviewer that `/no-comments` spawns.
+
+Installed through the Claude Code plugin, they are namespaced `skills:poteto-agent` and `skills:comment-sicko`. `npx skills` installs only skills. Copy `agents/*.md` into `.claude/agents/` or `~/.claude/agents/` yourself.
+
+**What changed from the Cursor original:**
+
+| Cursor | Claude Code |
+|--------|-------------|
+| `Task` tool, `subagent_type: generalPurpose`, `readonly: true` | Agent tool, `general-purpose` (or `Explore` for read-only search), with a read-only brief |
+| Multi-vendor model slugs (`claude-opus-…-max`, `gpt-…`, `grok-…`) | Claude model aliases `opus` / `sonnet` / `haiku` / `inherit`. Panels get diversity by mixing tiers and running a model more than once |
+| `~/.cursor/rules/pstack-models.mdc` | `~/.claude/rules/pstack-models.md`, which skills read by path |
+| `environment: "cloud"` workers, Cursor dashboard | `isolation: "remote"` where available, else `isolation: "worktree"`, and `claude --cloud` sessions at claude.ai/code |
+| `agent-transcripts/`, `~/.cursor/projects/` | `~/.claude/projects/<slug>/<session>.jsonl` (subagents in `<session>/subagents/`) |
+| `.cursor/skills/`, `AskQuestion`, `create-skill` | `.claude/skills/`, `AskUserQuestion`, Anthropic's `skill-creator` plugin |
+| `cursor-team-kit` `/deslop`, `control-ui`, `control-cli` | Built-in `/simplify`, `/run`, Claude in Chrome (`claude --chrome`) or Playwright MCP, `tmux` for CLIs |
+| Bugbot-only triage | Any review bot (Bugbot, the `claude` GitHub App, Copilot). `watch-pr` also detects the `claude` bot |
+| Grok Bot webhook routines (`make-bot-ui`) | Claude Code routine API triggers (research preview) |
+| Skills calling skills | Skills keep `disable-model-invocation: true` and read `${CLAUDE_SKILL_DIR}/../<name>/SKILL.md` |
+
+Not ported: the Cursor-only `automations/benny` pack (Cursor Automations) and the upstream `docs/guide`. The `poteto-mode` scripts (`watch-pr`, `orch`) need [Bun](https://bun.sh). `npx bun` works if Bun is not installed.
 
 ## Agent Compatibility
 

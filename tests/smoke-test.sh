@@ -23,7 +23,8 @@ set -uo pipefail
 
 REPO_URL="${SKILLS_REPO_URL:-https://github.com/cicorias/skills.git}"
 REPO_SLUG="${SKILLS_REPO_SLUG:-cicorias/skills}"
-EXPECTED_SKILLS=(grill-me claude-automation-recommender new-skill simplified-technical-english)
+EXPECTED_SKILLS=(grill-me claude-automation-recommender new-skill simplified-technical-english
+  poteto-mode setup-pstack interrogate principle-prove-it-works)
 
 # ---- output helpers ---------------------------------------------------------
 if [ -t 1 ]; then G=$'\033[32m'; R=$'\033[31m'; B=$'\033[1m'; Z=$'\033[0m'; else G=; R=; B=; Z=; fi

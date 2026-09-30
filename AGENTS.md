@@ -27,8 +27,11 @@ skills/
     SKILL.md          # required — the skill definition (see format below)
     references/       # optional — supporting docs the skill can read
     scripts/          # optional — helper scripts the skill can run
+agents/
+  <agent-name>.md     # Claude Code subagent definitions (listed in plugin.json `agents`)
+licenses/             # third-party license texts referenced from NOTICE
 .claude-plugin/
-  plugin.json         # Claude Code plugin manifest — lists every skill
+  plugin.json         # Claude Code plugin manifest — lists every skill and agent
 README.md             # human-facing catalog of skills
 AGENTS.md             # ← you are here (canonical agent instructions)
 CLAUDE.md             # symlink → AGENTS.md
@@ -83,6 +86,19 @@ catalog automatically.
 ### Conventions
 - Folder name, frontmatter `name`, and slash-command invocation all match (kebab-case).
 - Ported/third-party skills: preserve their license and record attribution in `NOTICE`.
+- Ported skills must use Claude Code tool names and paths (Agent tool, AskUserQuestion,
+  `.claude/skills/`, `~/.claude/projects/` transcripts), not the source agent's. Note any
+  remaining source-agent dependency in the skill so it degrades gracefully.
+
+### pstack (ported from Cursor)
+The `pstack` skills (`poteto-mode`, `how`, `why`, `architect`, `arena`, `swarm`,
+`interrogate`, `reflect`, the `principle-*` leaves, …) and the `agents/` files are a
+Claude Code port of [cursor/plugins `pstack`](https://github.com/cursor/plugins/tree/main/pstack)
+(MIT). The Cursor-to-Claude Code mapping lives in the **Claude Code runtime** section of
+`skills/poteto-mode/SKILL.md`; keep edits consistent with it. pstack skills set
+`disable-model-invocation: true` and load each other by reading
+`${CLAUDE_SKILL_DIR}/../<name>/SKILL.md`, so keep all pstack skills side by side.
+Per-role models come from `~/.claude/rules/pstack-models.md` (written by `/setup-pstack`).
 - Keep `SKILL.md` focused; push long reference material into `references/`.
 
 ## How skills get installed

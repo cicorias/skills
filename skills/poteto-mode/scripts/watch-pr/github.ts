@@ -336,6 +336,8 @@ function isBugbot(comment: T.ReviewComment | null): boolean {
   const body = comment.body.toLowerCase();
   return (
     author.includes("bugbot") ||
+    author === "claude" ||
+    author === "claude[bot]" ||
     (author === "cursor" &&
       [
         "bugbot",

@@ -256,6 +256,38 @@ it("annotates Bugbot threads with distinct review-pass counts", () => {
   expect(threads.map((thread) => thread.bugbotReviewPasses)).toEqual([3, 3]);
 });
 
+it("treats review threads opened by the Claude GitHub App as review-bot threads", () => {
+  const thread = (id: string, login: string) => ({
+    id,
+    isResolved: false,
+    comments: {
+      nodes: [
+        {
+          body: "Possible null dereference here.",
+          createdAt: "now",
+          path: "a.ts",
+          line: 1,
+          author: { login },
+        },
+      ],
+    },
+  });
+  const response = {
+    data: {
+      repository: {
+        pullRequest: {
+          reviewThreads: {
+            nodes: [thread("app", "claude"), thread("bot", "claude[bot]"), thread("human", "octocat")],
+          },
+        },
+      },
+    },
+  };
+  const threads = parseReviewThreads(response);
+  expect(threads.map((thread) => thread.isBugbot)).toEqual([true, true, false]);
+  expect(threads.map((thread) => thread.bugbotReviewPasses)).toEqual([1, 1, 1]);
+});
+
 describe("context and stack discovery", () => {
   it("returns a fully explicit context without any reader call", async () => {
     const reader = fakeReader();

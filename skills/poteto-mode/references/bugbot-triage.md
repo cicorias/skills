@@ -1,6 +1,6 @@
 # Bugbot triage
 
-Use this reference when the Babysit playbook (`../playbooks/babysit.md`) handles Bugbot or review-automation comments. The goal is not to ignore Bugbot by default. The goal is to stop treating every comment as a required code change.
+Use this reference when the Babysit playbook (`../playbooks/babysit.md`) handles Bugbot or review-automation comments. "Bugbot" below means any automated PR reviewer: Cursor Bugbot, Claude code review (the `claude` GitHub App), Copilot review, or a security-review bot. The same rubric applies to each. The goal is not to ignore Bugbot by default. The goal is to stop treating every comment as a required code change.
 
 ## Decision rubric
 
