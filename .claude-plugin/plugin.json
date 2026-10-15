@@ -1,15 +1,17 @@
 {
   "name": "skills",
   "description": "A collection of reusable Claude Code skills",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "author": {
     "name": "Shawn Cicoria",
     "email": "github@cicoria.com"
   },
-  "skills" : [
+  "repository": "https://github.com/cicorias/skills",
+  "skills": [
     "./skills/grill-me",
     "./skills/claude-automation-recommender",
     "./skills/new-skill",
-    "./skills/simplified-technical-english"
+    "./skills/simplified-technical-english",
+    "./skills/ambition"
   ]
 }

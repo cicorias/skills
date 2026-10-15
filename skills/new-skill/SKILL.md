@@ -1,7 +1,7 @@
 ---
 name: new-skill
-description: Scaffold a new agent skill in this repository. Use when the user types /new-skill or says "add a new skill", "create a skill", "build a skill", "scaffold a skill", or "make a new skill". Interviews the user for the skill's purpose and triggers, writes a well-formed skills/<name>/SKILL.md, and wires up the plugin manifest and README catalog so the skill is installable for Claude Code, GitHub Copilot CLI, and other skills-compatible agents.
-argument-hint: [skill-name]
+description: Scaffold a new agent skill in this repository. Use when the user types /new-skill or says "add a new skill", "create a skill", "build a skill", "scaffold a skill", or "make a new skill". Interviews the user for the skill's purpose and triggers, writes a well-formed SKILL.md under skills/, and wires up the plugin manifest and README catalog so the skill is installable for Claude Code, GitHub Copilot CLI, and other skills-compatible agents.
+argument-hint: "[skill-name]"
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash]
 ---
 
@@ -29,7 +29,7 @@ passed a name in `$ARGUMENTS`, use it as the default for Q1 and confirm.
 4. **Tools** — which tools does it need (Read, Write, Edit, Glob, Grep, Bash, WebFetch,
    …)? Recommend the minimal set. If unrestricted, omit `allowed-tools`.
 5. **Arguments** — does it take a slash-command argument? If yes, capture an
-   `argument-hint` like `[topic]`.
+   `argument-hint` like `"[topic]"` (quote it — unquoted `[...]` parses as a YAML list).
 6. **Supporting files** — will it need a `references/` folder (long docs the skill
    reads) or `scripts/` folder (helpers it runs)? Create empty stubs only if wanted.
 7. **License / attribution** — if ported from elsewhere, capture the license and plan a
@@ -48,7 +48,7 @@ they apply.
 ---
 name: <name>
 description: <what it does>. Use when <triggers: slash command, phrases, task shapes>.
-argument-hint: <hint>            # only if it takes an argument
+argument-hint: "<hint>"          # only if it takes an argument; keep the quotes
 allowed-tools: [<tools>]         # only if restricted
 ---
 
@@ -83,8 +83,14 @@ editing it precisely — do not blindly overwrite.
 
 ## Verify
 
-1. Confirm the folder and `SKILL.md` exist and the frontmatter parses (name matches
-   folder; description present).
+1. Run the repo's metadata tests — they check frontmatter, folder layout,
+   `plugin.json`, the README row, and links exactly as `npx skills` reads them:
+   ```bash
+   npm install   # first time only
+   npm test
+   ```
+   Fix every failure before going on. Run `npm run test:cli` too when network access
+   is available; it installs every skill with the real `skills` CLI.
 2. Show the discovery listing so the user sees it registered:
    ```bash
    npx skills add . --list

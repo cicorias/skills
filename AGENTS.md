@@ -29,6 +29,12 @@ skills/
     scripts/          # optional — helper scripts the skill can run
 .claude-plugin/
   plugin.json         # Claude Code plugin manifest — lists every skill
+  marketplace.json    # makes this repo a plugin marketplace (`/plugin install skills --marketplace cicorias/skills`)
+tests/
+  unit/               # offline metadata/structure tests (`npm test`)
+  integration/        # real `skills` CLI install + `claude plugin validate` (`npm run test:cli`)
+  smoke-test.sh       # checks the *published* GitHub repo
+package.json          # test tooling only (not a published package)
 README.md             # human-facing catalog of skills
 AGENTS.md             # ← you are here (canonical agent instructions)
 CLAUDE.md             # symlink → AGENTS.md
@@ -45,7 +51,7 @@ Each skill is a Markdown file with YAML frontmatter. **Only `name` and
 ---
 name: my-skill                       # required — kebab-case, matches the folder name
 description: One or two sentences.    # required — what it does AND when to trigger it.
-argument-hint: [topic]               # optional — shown for slash-command args
+argument-hint: "[topic]"             # optional — shown for slash-command args; quote it (bare [..] is a YAML list)
 allowed-tools: [Read, Grep, Bash]    # optional — restrict tools (Claude Code)
 license: Apache-2.0                   # optional
 ---
@@ -79,6 +85,19 @@ catalog automatically.
 2. Add `"./skills/<skill-name>"` to the `skills` array in `.claude-plugin/plugin.json`.
 3. Add a row to the **Skills** catalog table in `README.md`.
 4. Keep supporting files under `references/` or `scripts/` inside the skill folder.
+5. Run `npm test` (and `npm run test:cli` when online). Both must pass before committing.
+
+### What the tests enforce
+- `name`: string, lowercase kebab-case, ≤ 64 chars, equal to the folder name.
+- `description`: string, ≤ 1024 chars, no `<` or `>`, and it names its triggers ("Use when …").
+- No `metadata.internal: true` (that hides a skill from `npx skills add`), no unknown
+  frontmatter keys, and correct types for optional fields.
+- Relative links in `SKILL.md` resolve inside the skill folder (installers copy only that folder).
+- `plugin.json` `skills[]` matches the `skills/` folders exactly; `marketplace.json`
+  lists the plugin at the same version; README has a catalog row per skill.
+- `CLAUDE.md` and `.github/copilot-instructions.md` are symlinks to `AGENTS.md`.
+- Bump `version` in **both** `plugin.json` and `marketplace.json` when skills change, so
+  plugin users get the update.
 
 ### Conventions
 - Folder name, frontmatter `name`, and slash-command invocation all match (kebab-case).

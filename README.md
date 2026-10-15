@@ -26,9 +26,26 @@ npx skills add cicorias/skills --list
 
 ### Via Claude Code plugin
 
-```bash
-claude plugin install git@github.com:cicorias/skills.git
+This repo is also a Claude Code plugin marketplace (`.claude-plugin/marketplace.json`).
+Inside Claude Code:
+
 ```
+/plugin install skills --marketplace cicorias/skills
+```
+
+Or in two steps (any Claude Code version with plugins):
+
+```
+/plugin marketplace add cicorias/skills
+/plugin install skills@cicorias-skills
+```
+
+Plugin skills are namespaced, e.g. `/skills:ambition`.
+
+> **Why isn't a skill on [skills.sh](https://skills.sh) / `npx skills find` yet?** The
+> skills.sh directory indexes a skill only after someone installs it from the public
+> GitHub repo (`npx skills add cicorias/skills …`) with telemetry enabled. `npx skills
+> add cicorias/skills --list` always shows every skill straight from GitHub.
 
 ## Skills
 
@@ -40,6 +57,7 @@ The catalog below is the living list of skills in this repo — add a row for ea
 | [grill-me](#grill-me) | `/grill-me` | Interview you about a task until it's fully scoped, then write `DESIGN.md`. |
 | [claude-automation-recommender](#claude-automation-recommender) | `/claude-automation-recommender` | Analyze a codebase and recommend agent automations (read-only). |
 | [simplified-technical-english](#simplified-technical-english) | `/simplified-technical-english` | Write, rewrite, or audit technical docs in Simplified Technical English (ASD-STE100). |
+| [ambition](#ambition) | `/ambition` | Upgrade a task or prompt with Altitude, Depth, and Range before doing it. |
 
 ### `/new-skill`
 
@@ -99,6 +117,28 @@ Writes and edits technical documentation in **Simplified Technical English (STE)
 
 > Teaches STE principles and method — it is not the ASD-STE100 dictionary. For certified compliance, defer to the current specification and a checker tool.
 
+### `/ambition`
+
+Raises the ambition of a task before doing it, using the three lenses from Felix Rieseberg's
+[*How to be more ambitious*](https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/):
+
+- **Altitude** — aim at the outcome the task serves, up to a system that makes the task unnecessary.
+- **Depth** — work like a field-leading expert: raw data, professional tools, a stretch target, and an outside judge (never self-grading).
+- **Range** — rewrite nouns as verbs, then run a crew of specialist passes (subagents in Claude Code) defined by what they do, not who they pretend to be.
+
+It returns an upgraded brief (rewritten prompt, stretch target, verification method, access needed) and then offers to execute it.
+
+**Usage:**
+
+```
+/ambition <task, prompt, or plan>
+/ambition depth <task>
+"be more ambitious with this QBR"
+"what would an expert do here?"
+```
+
+> Under GitHub Copilot CLI the crew runs as sequential passes instead of parallel subagents.
+
 ## Agent Compatibility
 
 Skills in this repo are designed to run under any agent that the [`skills`](https://npm.im/skills) CLI supports. Feature parity across the two primary targets:
@@ -132,6 +172,9 @@ To add one by hand:
 1. Create `skills/<skill-name>/SKILL.md` (kebab-case folder = frontmatter `name`; only `name` and `description` are required).
 2. Add `"./skills/<skill-name>"` to the `skills` array in `.claude-plugin/plugin.json`.
 3. Add a row to the **Skills** catalog table above.
+4. Run the checks: `npm test` (offline metadata/structure tests) and
+   `npm run test:cli` (installs every skill with the real `skills` CLI and validates
+   the plugin with `claude plugin validate`).
 
 See [`AGENTS.md`](./AGENTS.md) for the full SKILL.md format and conventions, and the [example skill format](https://skills.sh/) for reference.
 

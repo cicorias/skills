@@ -4,8 +4,11 @@ Manual checklist for validating this skills collection from a consumer's point o
 view: that the published repo is correct, that a fresh project can install the skills
 for Claude Code and GitHub Copilot CLI, and that the skills actually run.
 
+- **Before pushing**, run the repo tests from the root: `npm test` (offline metadata and
+  structure checks) and `npm run test:cli` (installs this working tree with the real
+  `skills` CLI and runs `claude plugin validate`).
 - **Parts A + B** are automated by [`smoke-test.sh`](./smoke-test.sh) — run that for a
-  fast non-interactive check, or follow the steps below by hand.
+  fast non-interactive check of the *published* repo, or follow the steps below by hand.
 - **Part C** requires an interactive agent session, so it stays manual.
 
 All steps use a throwaway directory `~/skills-e2e`; nothing touches your real repos.
@@ -45,11 +48,11 @@ cd clone-check
   ```
   Expect `1` for each file.
 
-- [ ] **The CLI discovers all four skills:**
+- [ ] **The CLI discovers every skill in `.claude-plugin/plugin.json`:**
   ```bash
   npx skills add . --list
   ```
-  Expect: `grill-me`, `claude-automation-recommender`, `new-skill`,
+  Expect: `ambition`, `claude-automation-recommender`, `grill-me`, `new-skill`,
   `simplified-technical-english`.
 
 ```bash
@@ -72,7 +75,7 @@ git init
   npx skills add cicorias/skills -a claude-code -s '*' -y
   ls -la .claude/skills/
   ```
-  Expect the four skills present (symlinked into `node_modules`).
+  Expect every skill present (symlinked into `node_modules`).
   ```bash
   head -3 .claude/skills/simplified-technical-english/SKILL.md
   ```
@@ -83,7 +86,7 @@ git init
   npx skills add cicorias/skills -a github-copilot -s '*' -y
   ls -la .agents/skills/
   ```
-  Expect the same four skills under `.agents/skills/`.
+  Expect the same skills under `.agents/skills/`.
 
 - [ ] **Install a single skill (proves `-s` selection):**
   ```bash
@@ -160,6 +163,7 @@ rm -rf ~/skills-e2e
 
 | Part | Validates |
 |------|-----------|
+| Tests | Metadata, layout, manifests, README rows, and CLI installs are valid before pushing |
 | A | Push succeeded; symlinks clone as symlinks; guidance stays in sync; CLI sees all skills |
 | B | A fresh project installs all/one skill for Claude Code and Copilot CLI into the correct paths |
 | C | Skills actually run — STE rewrites/edits files; `/new-skill` scaffolds and wires a new skill |

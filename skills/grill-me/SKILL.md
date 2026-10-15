@@ -1,7 +1,7 @@
 ---
 name: grill-me
 description: Interview the user about every aspect of their task until a shared understanding is reached. Use this skill when the user types /grill-me or says "grill me", "interview me", "ask me questions first", "walk me through the design", or any time the task is ambiguous and needs to be fully scoped before work begins. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one, providing a recommended answer for each question.
-argument-hint: [topic]
+argument-hint: "[topic]"
 allowed-tools: [Read, Glob, Grep, Bash]
 ---
 

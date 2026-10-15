@@ -1,0 +1,17 @@
+{
+  "name": "cicorias-skills",
+  "private": true,
+  "description": "Validation tests for the cicorias/skills collection (not a published package)",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"tests/unit/**/*.test.mjs\"",
+    "test:cli": "node --test \"tests/integration/**/*.test.mjs\"",
+    "test:all": "node --test \"tests/**/*.test.mjs\""
+  },
+  "devDependencies": {
+    "yaml": "2.8.3"
+  }
+}

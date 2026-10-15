@@ -23,7 +23,12 @@ set -uo pipefail
 
 REPO_URL="${SKILLS_REPO_URL:-https://github.com/cicorias/skills.git}"
 REPO_SLUG="${SKILLS_REPO_SLUG:-cicorias/skills}"
-EXPECTED_SKILLS=(grill-me claude-automation-recommender new-skill simplified-technical-english)
+# Expected skills come from this checkout's plugin manifest, so the list never drifts.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+mapfile -t EXPECTED_SKILLS < <(node -e '
+  const p = require(process.argv[1]);
+  for (const s of p.skills) console.log(s.replace(/^\.\/skills\//, "").replace(/\/$/, ""));
+' "$SCRIPT_DIR/../.claude-plugin/plugin.json")
 
 # ---- output helpers ---------------------------------------------------------
 if [ -t 1 ]; then G=$'\033[32m'; R=$'\033[31m'; B=$'\033[1m'; Z=$'\033[0m'; else G=; R=; B=; Z=; fi
@@ -36,7 +41,7 @@ check()   { local d="$1"; shift; if "$@" >/dev/null 2>&1; then ok "$d"; else bad
 
 # ---- prerequisites ----------------------------------------------------------
 section "Prerequisites"
-for tool in git npx; do
+for tool in git npx node; do
   if command -v "$tool" >/dev/null 2>&1; then ok "$tool found"; else bad "$tool NOT found"; fi
 done
 [ "$FAILURES" -eq 0 ] || { printf '\n%sAborting: missing prerequisites.%s\n' "$R" "$Z"; exit 1; }
@@ -125,7 +130,8 @@ mkdir -p "$ONE" && ( cd "$ONE" && git init --quiet )
 if [ -e "$ONE/.claude/skills/simplified-technical-english" ]; then ok "selected skill installed"; else bad "selected skill MISSING"; fi
 # no other skill should have come along
 extra=0
-for s in grill-me claude-automation-recommender new-skill; do
+for s in "${EXPECTED_SKILLS[@]}"; do
+  [ "$s" = simplified-technical-english ] && continue
   [ -e "$ONE/.claude/skills/$s" ] && extra=$((extra + 1))
 done
 if [ "$extra" -eq 0 ]; then ok "no unselected skills installed"; else bad "$extra unselected skill(s) also installed"; fi
