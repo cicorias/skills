@@ -45,13 +45,12 @@ cd clone-check
   ```
   Expect `1` for each file.
 
-- [ ] **The CLI discovers every skill in `.claude-plugin/plugin.json` (51, including pstack):**
+- [ ] **The CLI discovers all four skills:**
   ```bash
   npx skills add . --list
   ```
   Expect: `grill-me`, `claude-automation-recommender`, `new-skill`,
-  `simplified-technical-english`, plus the pstack skills (`poteto-mode`, `setup-pstack`,
-  `how`, `why`, `interrogate`, `principle-*`, …).
+  `simplified-technical-english`.
 
 ```bash
 cd ~/skills-e2e
@@ -73,7 +72,7 @@ git init
   npx skills add cicorias/skills -a claude-code -s '*' -y
   ls -la .claude/skills/
   ```
-  Expect every skill present (symlinked into `node_modules`), including the pstack skills such as `poteto-mode` and `principle-*`.
+  Expect the four skills present (symlinked into `node_modules`).
   ```bash
   head -3 .claude/skills/simplified-technical-english/SKILL.md
   ```
@@ -84,7 +83,7 @@ git init
   npx skills add cicorias/skills -a github-copilot -s '*' -y
   ls -la .agents/skills/
   ```
-  Expect the same skills under `.agents/skills/`.
+  Expect the same four skills under `.agents/skills/`.
 
 - [ ] **Install a single skill (proves `-s` selection):**
   ```bash
